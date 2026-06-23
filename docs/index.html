@@ -4,164 +4,238 @@
 :root{
   --n0:#2e3440;--n1:#3b4252;--n2:#434c5e;--n3:#4c566a;
   --n4:#d8dee9;--n5:#e5e9f0;--n6:#eceff4;
-  --red:#bf616a;--amber:#ebcb8b;
+  --red:#bf616a;--orange:#d08770;--amber:#ebcb8b;
+  --green:#a3be8c;--teal:#8fbcbb;--blue:#81a1c1;--purple:#b48ead;
   --mono:'JetBrains Mono','Courier New',monospace;
 }
 body{background:var(--n0);color:var(--n4);font-family:var(--font-sans,system-ui,sans-serif);line-height:1.6}
 
 nav{
   background:var(--n1);border-bottom:1px solid var(--n2);
-  padding:0 40px;height:56px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 40px;height:58px;display:flex;align-items:center;justify-content:space-between;
 }
 .nav-logo{display:flex;align-items:center;gap:10px}
 .logo-mark{
-  width:30px;height:30px;border-radius:8px;
-  background:var(--red);display:flex;align-items:center;justify-content:center;
+  width:32px;height:32px;border-radius:8px;
+  background:var(--teal);display:flex;align-items:center;justify-content:center;
 }
-.logo-mark i{font-size:16px;color:var(--n6)}
+.logo-mark i{font-size:17px;color:var(--n0)}
 .logo-name{font-size:17px;font-weight:500;color:var(--n6);letter-spacing:0.02em}
-.logo-name span{color:var(--red)}
-.nav-links{display:flex;gap:24px}
+.logo-name span{color:var(--teal)}
+.nav-links{display:flex;gap:26px}
 .nav-links a{font-size:13px;color:var(--n4);text-decoration:none;transition:color .2s}
 .nav-links a:hover{color:var(--n6)}
 .nav-cta{
-  background:var(--red);color:var(--n6);border:none;
-  padding:7px 18px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;
+  background:var(--teal);color:var(--n0);border:none;
+  padding:7px 20px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;
 }
 
 .hero{
   background:var(--n1);border-bottom:1px solid var(--n2);
-  padding:80px 40px 72px;text-align:center;position:relative;overflow:hidden;
+  padding:88px 40px 72px;text-align:center;position:relative;overflow:hidden;
 }
-.hero-grid-bg{
+.hero-dots{
   position:absolute;inset:0;
-  background-image:linear-gradient(var(--n2) 1px,transparent 1px),linear-gradient(90deg,var(--n2) 1px,transparent 1px);
-  background-size:40px 40px;opacity:0.25;
+  background-image:radial-gradient(circle,var(--n2) 1px,transparent 1px);
+  background-size:28px 28px;opacity:0.5;
 }
+.hero-glow-l{position:absolute;top:-80px;left:-80px;width:320px;height:320px;border-radius:50%;background:var(--teal);opacity:0.04;}
+.hero-glow-r{position:absolute;bottom:-60px;right:-60px;width:260px;height:260px;border-radius:50%;background:var(--purple);opacity:0.05;}
 .hero-content{position:relative}
 .hero-pill{
-  display:inline-flex;align-items:center;gap:6px;
+  display:inline-flex;align-items:center;gap:7px;
   background:var(--n2);border:1px solid var(--n3);border-radius:20px;
-  padding:5px 14px;font-size:11px;color:var(--amber);letter-spacing:0.07em;
+  padding:5px 14px;font-size:11px;color:var(--green);letter-spacing:0.07em;
   text-transform:uppercase;font-weight:500;margin-bottom:24px;
 }
-.hero h1{font-size:44px;font-weight:500;color:var(--n6);line-height:1.15;margin-bottom:18px;letter-spacing:-0.02em}
-.hero h1 em{color:var(--red);font-style:normal}
-.hero p{font-size:16px;color:var(--n4);max-width:480px;margin:0 auto 36px;line-height:1.7}
+.hero h1{font-size:46px;font-weight:500;color:var(--n6);line-height:1.12;margin-bottom:20px;letter-spacing:-0.025em}
+.hero h1 .accent-teal{color:var(--teal)}
+.hero h1 .accent-red{color:var(--red)}
+.hero p{font-size:16px;color:var(--n4);max-width:500px;margin:0 auto 38px;line-height:1.75}
 .hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
 .btn-primary{
-  background:var(--red);color:var(--n6);border:none;
-  padding:12px 28px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;
+  background:var(--teal);color:var(--n0);border:none;
+  padding:13px 30px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;
   display:inline-flex;align-items:center;gap:8px;
 }
 .btn-secondary{
   background:transparent;color:var(--n5);
   border:1px solid var(--n3);
-  padding:12px 28px;border-radius:8px;font-size:14px;cursor:pointer;
+  padding:13px 30px;border-radius:8px;font-size:14px;cursor:pointer;
   display:inline-flex;align-items:center;gap:8px;
 }
 .hero-stats{
-  display:flex;justify-content:center;gap:40px;margin-top:56px;
+  display:flex;justify-content:center;gap:0;margin-top:60px;
   padding-top:40px;border-top:1px solid var(--n2);flex-wrap:wrap;
 }
-.stat-item{text-align:center}
-.stat-val{font-size:28px;font-weight:500;color:var(--n6);font-family:var(--mono)}
-.stat-val span{color:var(--red)}
-.stat-lbl{font-size:12px;color:var(--n3);margin-top:2px}
-
-.section{padding:64px 40px}
-.section-tag{
-  display:inline-block;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;
-  color:var(--amber);font-weight:500;margin-bottom:12px;
+.stat-item{
+  text-align:center;padding:0 36px;
+  border-right:1px solid var(--n2);
 }
-.section-h{font-size:28px;font-weight:500;color:var(--n6);margin-bottom:10px;line-height:1.3}
-.section-sub{font-size:15px;color:var(--n4);max-width:480px;line-height:1.7;margin-bottom:40px}
+.stat-item:last-child{border-right:none}
+.stat-val{font-size:30px;font-weight:500;color:var(--n6);font-family:var(--mono)}
+.stat-val.c-teal{color:var(--teal)}
+.stat-val.c-green{color:var(--green)}
+.stat-val.c-blue{color:var(--blue)}
+.stat-val.c-amber{color:var(--amber)}
+.stat-lbl{font-size:11px;color:var(--n3);margin-top:4px;letter-spacing:0.04em}
 
-.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--n2);border:1px solid var(--n2);border-radius:12px;overflow:hidden}
-.feat{background:var(--n1);padding:28px 24px}
-.feat-icon{font-size:22px;color:var(--red);margin-bottom:16px}
+.trust-bar{
+  background:var(--n0);border-bottom:1px solid var(--n2);
+  padding:20px 40px;
+}
+.trust-inner{display:flex;align-items:center;justify-content:center;gap:36px;flex-wrap:wrap}
+.trust-item{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--n3)}
+.trust-item i{font-size:16px}
+.trust-item.c-teal i{color:var(--teal)}
+.trust-item.c-green i{color:var(--green)}
+.trust-item.c-blue i{color:var(--blue)}
+.trust-item.c-purple i{color:var(--purple)}
+.trust-item.c-amber i{color:var(--amber)}
+
+.section{padding:68px 40px}
+.section-eyebrow{
+  display:flex;align-items:center;gap:8px;margin-bottom:14px;
+}
+.eyebrow-dot{width:6px;height:6px;border-radius:50%}
+.eyebrow-text{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;font-weight:500}
+.section-h{font-size:30px;font-weight:500;color:var(--n6);margin-bottom:12px;line-height:1.25}
+.section-sub{font-size:15px;color:var(--n4);max-width:500px;line-height:1.7;margin-bottom:44px}
+
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(196px,1fr));gap:12px}
+.feat{
+  background:var(--n1);border:1px solid var(--n2);
+  border-radius:12px;padding:26px 22px;
+  border-top:2px solid transparent;transition:border-color .2s;
+}
+.feat.c-teal{border-top-color:var(--teal)}
+.feat.c-blue{border-top-color:var(--blue)}
+.feat.c-green{border-top-color:var(--green)}
+.feat.c-purple{border-top-color:var(--purple)}
+.feat.c-amber{border-top-color:var(--amber)}
+.feat.c-red{border-top-color:var(--red)}
+.feat-icon{font-size:22px;margin-bottom:16px}
+.feat.c-teal .feat-icon{color:var(--teal)}
+.feat.c-blue .feat-icon{color:var(--blue)}
+.feat.c-green .feat-icon{color:var(--green)}
+.feat.c-purple .feat-icon{color:var(--purple)}
+.feat.c-amber .feat-icon{color:var(--amber)}
+.feat.c-red .feat-icon{color:var(--red)}
 .feat h3{font-size:14px;font-weight:500;color:var(--n6);margin-bottom:8px}
-.feat p{font-size:13px;color:var(--n4);line-height:1.6}
+.feat p{font-size:12px;color:var(--n4);line-height:1.65}
 .feat code{font-family:var(--mono);font-size:11px;background:var(--n2);padding:1px 5px;border-radius:3px;color:var(--amber)}
 
-.how-section{background:var(--n1);border-top:1px solid var(--n2);border-bottom:1px solid var(--n2);padding:64px 40px}
-.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:0;position:relative}
-.step{padding:0 24px 0 0;position:relative}
-.step+.step{padding-left:24px;border-left:1px solid var(--n2)}
-.step-num{font-family:var(--mono);font-size:11px;color:var(--n3);margin-bottom:12px}
+.how-section{
+  background:var(--n1);border-top:1px solid var(--n2);border-bottom:1px solid var(--n2);
+  padding:68px 40px;
+}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:0}
+.step{padding:0 20px;position:relative}
+.step+.step{border-left:1px solid var(--n2)}
+.step-num{font-family:var(--mono);font-size:11px;margin-bottom:14px;font-weight:500}
 .step-icon-wrap{
   width:40px;height:40px;border-radius:10px;
-  background:var(--n2);display:flex;align-items:center;justify-content:center;
-  font-size:20px;color:var(--n4);margin-bottom:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;margin-bottom:14px;
 }
-.step.active .step-icon-wrap{background:rgba(191,97,106,0.15);color:var(--red)}
-.step h4{font-size:14px;font-weight:500;color:var(--n5);margin-bottom:6px}
+.si-teal{background:rgba(143,188,187,0.12);color:var(--teal)}
+.si-blue{background:rgba(129,161,193,0.12);color:var(--blue)}
+.si-amber{background:rgba(235,203,139,0.10);color:var(--amber)}
+.si-green{background:rgba(163,190,140,0.12);color:var(--green)}
+.step h4{font-size:13px;font-weight:500;color:var(--n5);margin-bottom:6px}
 .step p{font-size:12px;color:var(--n3);line-height:1.6}
+
+.packet-section{background:var(--n0);padding:68px 40px}
+.packet-viz{
+  background:var(--n1);border:1px solid var(--n2);border-radius:12px;overflow:hidden;
+  max-width:600px;
+}
+.pkt-header{
+  background:var(--n2);padding:10px 18px;
+  font-size:11px;font-family:var(--mono);color:var(--n3);
+  display:flex;align-items:center;gap:8px;
+}
+.pkt-header span{color:var(--teal)}
+.pkt-body{padding:24px 20px}
+.pkt-row{display:flex;align-items:center;gap:0;margin-bottom:10px;font-family:var(--mono);font-size:11px}
+.pkt-lbl{color:var(--n3);min-width:80px;font-size:10px}
+.blk{height:34px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;letter-spacing:0.04em}
+.blk-plain{flex:1;background:var(--n2);border:1px solid var(--n3);color:var(--n4);border-radius:4px}
+.blk-iv{width:88px;background:rgba(235,203,139,0.12);border:1px solid rgba(235,203,139,0.25);color:var(--amber);border-radius:4px 0 0 4px}
+.blk-ct{flex:1;background:rgba(191,97,106,0.1);border:1px solid rgba(191,97,106,0.25);color:var(--red)}
+.blk-tag{width:88px;background:rgba(143,188,187,0.1);border:1px solid rgba(143,188,187,0.25);color:var(--teal);border-radius:0 4px 4px 0}
+.pkt-arrow{text-align:center;color:var(--n3);font-size:11px;margin:2px 0 2px 80px}
+.pkt-legend{display:flex;gap:16px;margin-top:16px;flex-wrap:wrap}
+.leg{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--n3)}
+.leg-dot{width:8px;height:8px;border-radius:2px}
 
 .pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
 .plan{
   background:var(--n1);border:1px solid var(--n2);
-  border-radius:12px;padding:28px 24px;
+  border-radius:12px;padding:30px 24px;
 }
-.plan.featured{border-color:var(--red);background:var(--n1)}
+.plan.featured{border-color:var(--teal)}
 .plan-badge{
-  font-size:10px;background:rgba(191,97,106,0.15);color:var(--red);
-  border:1px solid rgba(191,97,106,0.3);border-radius:20px;
+  font-size:10px;background:rgba(143,188,187,0.12);color:var(--teal);
+  border:1px solid rgba(143,188,187,0.3);border-radius:20px;
   padding:3px 10px;display:inline-block;margin-bottom:14px;letter-spacing:0.05em;
 }
 .plan-name{font-size:13px;font-weight:500;color:var(--n5);margin-bottom:8px}
-.plan-price{font-size:32px;font-weight:500;color:var(--n6);font-family:var(--mono)}
+.plan-price{font-size:34px;font-weight:500;color:var(--n6);font-family:var(--mono)}
 .plan-price sub{font-size:13px;color:var(--n3);font-family:var(--font-sans)}
-.plan-desc{font-size:12px;color:var(--n3);margin:8px 0 20px;line-height:1.5}
-.plan-features{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
+.plan-desc{font-size:12px;color:var(--n3);margin:8px 0 22px;line-height:1.5}
+.plan-features{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:26px}
 .plan-features li{font-size:12px;color:var(--n4);display:flex;align-items:center;gap:8px}
-.plan-features li i{font-size:14px;color:var(--amber)}
+.plan-features li i{font-size:14px}
+.plan.plan-free .plan-features li i{color:var(--blue)}
+.plan.featured .plan-features li i{color:var(--teal)}
+.plan.plan-team .plan-features li i{color:var(--purple)}
 .plan-btn{
   width:100%;padding:10px;border-radius:7px;font-size:13px;cursor:pointer;font-weight:500;
   border:1px solid var(--n3);background:transparent;color:var(--n5);
 }
-.plan.featured .plan-btn{background:var(--red);border-color:var(--red);color:var(--n6)}
-
-.trust-bar{
-  background:var(--n1);border-top:1px solid var(--n2);border-bottom:1px solid var(--n2);
-  padding:28px 40px;
-}
-.trust-inner{display:flex;align-items:center;justify-content:center;gap:40px;flex-wrap:wrap}
-.trust-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--n3)}
-.trust-item i{font-size:18px;color:var(--n3)}
+.plan.featured .plan-btn{background:var(--teal);border-color:var(--teal);color:var(--n0)}
 
 .cta-section{
-  background:var(--n0);padding:80px 40px;text-align:center;
+  background:var(--n1);border-top:1px solid var(--n2);
+  padding:80px 40px;text-align:center;
 }
-.cta-box{
-  background:var(--n1);border:1px solid var(--n2);border-radius:16px;
-  padding:56px 40px;max-width:560px;margin:0 auto;
-}
-.cta-box h2{font-size:26px;font-weight:500;color:var(--n6);margin-bottom:12px}
-.cta-box p{font-size:14px;color:var(--n4);margin-bottom:28px}
-.cta-input-row{display:flex;gap:8px;max-width:380px;margin:0 auto}
-.cta-input-row input{
+.cta-inner{max-width:520px;margin:0 auto}
+.cta-inner h2{font-size:28px;font-weight:500;color:var(--n6);margin-bottom:12px}
+.cta-inner p{font-size:14px;color:var(--n4);margin-bottom:30px;line-height:1.7}
+.cta-row{display:flex;gap:8px;max-width:380px;margin:0 auto}
+.cta-row input{
   flex:1;background:var(--n2);border:1px solid var(--n3);border-radius:7px;
-  padding:10px 14px;font-size:13px;color:var(--n6);outline:none;
+  padding:11px 14px;font-size:13px;color:var(--n6);outline:none;
 }
-.cta-input-row input::placeholder{color:var(--n3)}
-.cta-input-row button{
-  background:var(--red);color:var(--n6);border:none;
-  padding:10px 18px;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;
+.cta-row input::placeholder{color:var(--n3)}
+.cta-row button{
+  background:var(--teal);color:var(--n0);border:none;
+  padding:11px 20px;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;
 }
 .cta-note{font-size:11px;color:var(--n3);margin-top:12px}
+.cta-tags{display:flex;justify-content:center;gap:8px;margin-top:28px;flex-wrap:wrap}
+.cta-tag{
+  background:var(--n2);border:1px solid var(--n3);
+  border-radius:20px;padding:4px 12px;font-size:11px;
+}
+.cta-tag.c-teal{color:var(--teal);border-color:rgba(143,188,187,0.3)}
+.cta-tag.c-green{color:var(--green);border-color:rgba(163,190,140,0.3)}
+.cta-tag.c-blue{color:var(--blue);border-color:rgba(129,161,193,0.3)}
+.cta-tag.c-purple{color:var(--purple);border-color:rgba(180,142,173,0.3)}
 
 footer{
-  background:var(--n1);border-top:1px solid var(--n2);
-  padding:24px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
+  background:var(--n0);border-top:1px solid var(--n2);
+  padding:26px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;
 }
 .footer-left{display:flex;align-items:center;gap:10px}
-.footer-logo{width:24px;height:24px;border-radius:6px;background:var(--red);display:flex;align-items:center;justify-content:center}
-.footer-logo i{font-size:13px;color:var(--n6)}
+.footer-logo{width:26px;height:26px;border-radius:6px;background:var(--teal);display:flex;align-items:center;justify-content:center}
+.footer-logo i{font-size:14px;color:var(--n0)}
 .footer-name{font-size:13px;font-weight:500;color:var(--n4)}
-.footer-name span{color:var(--red)}
-.footer-links{display:flex;gap:20px}
-.footer-links a{font-size:12px;color:var(--n3);text-decoration:none}
+.footer-name span{color:var(--teal)}
+.footer-links{display:flex;gap:22px}
+.footer-links a{font-size:12px;color:var(--n3);text-decoration:none;transition:color .2s}
+.footer-links a:hover{color:var(--n4)}
 .footer-right{font-size:11px;color:var(--n3);font-family:var(--mono)}
 </style>
 
@@ -173,36 +247,39 @@ footer{
   <div class="nav-links">
     <a href="#">Features</a>
     <a href="#">How it works</a>
+    <a href="#">Pricing</a>
     <a href="#">Docs</a>
   </div>
   <button class="nav-cta">Get started</button>
 </nav>
 
 <div class="hero">
-  <div class="hero-grid-bg"></div>
+  <div class="hero-dots"></div>
+  <div class="hero-glow-l"></div>
+  <div class="hero-glow-r"></div>
   <div class="hero-content">
-    <div class="hero-pill"><i class="ti ti-shield-check" aria-hidden="true"></i> AES-256-GCM · Open source</div>
-    <h1>Your network.<br><em>Your rules.</em></h1>
-    <p>A self-hosted Layer 3 VPN built in C/C++ for Linux. Encrypt every packet with authenticated AES-256-GCM and route your traffic through a server you actually own.</p>
+    <div class="hero-pill"><i class="ti ti-shield-check" aria-hidden="true"></i> AES-256-GCM · Open source · C/C++</div>
+    <h1>Your network.<br><span class="accent-teal">Your rules.</span><br><span class="accent-red">Zero compromise.</span></h1>
+    <p>A self-hosted Layer 3 VPN built in C/C++ for Linux. Authenticated encryption on every packet, routed through a server you actually own.</p>
     <div class="hero-actions">
       <button class="btn-primary"><i class="ti ti-brand-github" aria-hidden="true"></i> View on GitHub</button>
       <button class="btn-secondary"><i class="ti ti-book" aria-hidden="true"></i> Read the docs</button>
     </div>
     <div class="hero-stats">
       <div class="stat-item">
-        <div class="stat-val">256<span>-bit</span></div>
+        <div class="stat-val c-teal">256<span style="font-size:16px;color:var(--n3)">-bit</span></div>
         <div class="stat-lbl">AES key length</div>
       </div>
       <div class="stat-item">
-        <div class="stat-val">0<span>ms</span></div>
+        <div class="stat-val c-green">0<span style="font-size:16px;color:var(--n3)">ms</span></div>
         <div class="stat-lbl">TCP overhead</div>
       </div>
       <div class="stat-item">
-        <div class="stat-val">L<span>3</span></div>
+        <div class="stat-val c-blue">L3</div>
         <div class="stat-lbl">OSI layer</div>
       </div>
       <div class="stat-item">
-        <div class="stat-val">100<span>%</span></div>
+        <div class="stat-val c-amber">100<span style="font-size:16px;color:var(--n3)">%</span></div>
         <div class="stat-lbl">Self-hosted</div>
       </div>
     </div>
@@ -211,45 +288,48 @@ footer{
 
 <div class="trust-bar">
   <div class="trust-inner">
-    <div class="trust-item"><i class="ti ti-lock" aria-hidden="true"></i> End-to-end encrypted</div>
-    <div class="trust-item"><i class="ti ti-eye-off" aria-hidden="true"></i> Zero logs policy</div>
-    <div class="trust-item"><i class="ti ti-server" aria-hidden="true"></i> Self-hosted infrastructure</div>
-    <div class="trust-item"><i class="ti ti-code" aria-hidden="true"></i> Fully open source</div>
-    <div class="trust-item"><i class="ti ti-brand-debian" aria-hidden="true"></i> Debian 13 · Linux</div>
+    <div class="trust-item c-teal"><i class="ti ti-lock" aria-hidden="true"></i> End-to-end encrypted</div>
+    <div class="trust-item c-purple"><i class="ti ti-eye-off" aria-hidden="true"></i> Zero logs</div>
+    <div class="trust-item c-blue"><i class="ti ti-server" aria-hidden="true"></i> Self-hosted</div>
+    <div class="trust-item c-green"><i class="ti ti-code" aria-hidden="true"></i> Open source</div>
+    <div class="trust-item c-amber"><i class="ti ti-brand-debian" aria-hidden="true"></i> Debian 13 · Linux</div>
   </div>
 </div>
 
 <section class="section">
-  <div class="section-tag">Features</div>
+  <div class="section-eyebrow">
+    <div class="eyebrow-dot" style="background:var(--teal)"></div>
+    <span class="eyebrow-text" style="color:var(--teal)">Features</span>
+  </div>
   <div class="section-h">Everything you need.<br>Nothing you don't.</div>
   <p class="section-sub">Built from first principles — no bloated daemons, no proprietary protocols, no black boxes.</p>
   <div class="features-grid">
-    <div class="feat">
+    <div class="feat c-teal">
       <div class="feat-icon"><i class="ti ti-topology-ring" aria-hidden="true"></i></div>
       <h3>Layer 3 TUN interface</h3>
       <p>Captures and injects raw IP packets via kernel <code>tun0</code> / <code>tun1</code> — no userspace overhead.</p>
     </div>
-    <div class="feat">
+    <div class="feat c-blue">
       <div class="feat-icon"><i class="ti ti-send" aria-hidden="true"></i></div>
       <h3>UDP transport</h3>
-      <p><code>SOCK_DGRAM</code> sockets eliminate TCP Meltdown. Low latency, high throughput.</p>
+      <p><code>SOCK_DGRAM</code> sockets eliminate TCP Meltdown. Low latency, high throughput, no encapsulation tax.</p>
     </div>
-    <div class="feat">
+    <div class="feat c-red">
       <div class="feat-icon"><i class="ti ti-lock" aria-hidden="true"></i></div>
       <h3>AES-256-GCM AEAD</h3>
-      <p>Every packet ships with a 12-byte IV and 16-byte GCM tag. Tamper-proof by design.</p>
+      <p>Every packet ships with a 12-byte IV and a 16-byte GCM tag. Tamper-proof. Authenticated. Fast.</p>
     </div>
-    <div class="feat">
+    <div class="feat c-amber">
       <div class="feat-icon"><i class="ti ti-terminal-2" aria-hidden="true"></i></div>
       <h3>Bash automation</h3>
       <p>Interfaces come up automatically via <code>ip addr</code> and <code>ip link</code>. One command deploy.</p>
     </div>
-    <div class="feat">
+    <div class="feat c-purple">
       <div class="feat-icon"><i class="ti ti-settings" aria-hidden="true"></i></div>
       <h3>OpenSSL EVP API</h3>
       <p>Built on the battle-tested EVP layer. No homebrew crypto. Standard, auditable primitives.</p>
     </div>
-    <div class="feat">
+    <div class="feat c-green">
       <div class="feat-icon"><i class="ti ti-home" aria-hidden="true"></i></div>
       <h3>Home server routing</h3>
       <p>Route traffic through your own machine. Exit from an IP address you trust completely.</p>
@@ -258,46 +338,87 @@ footer{
 </section>
 
 <div class="how-section">
-  <div class="section-tag">How it works</div>
+  <div class="section-eyebrow">
+    <div class="eyebrow-dot" style="background:var(--blue)"></div>
+    <span class="eyebrow-text" style="color:var(--blue)">How it works</span>
+  </div>
   <div class="section-h" style="margin-bottom:40px">Secure in four steps</div>
   <div class="steps">
-    <div class="step active">
-      <div class="step-num">01</div>
-      <div class="step-icon-wrap"><i class="ti ti-device-laptop" aria-hidden="true"></i></div>
+    <div class="step">
+      <div class="step-num" style="color:var(--teal)">01</div>
+      <div class="step-icon-wrap si-teal"><i class="ti ti-device-laptop" aria-hidden="true"></i></div>
       <h4>Traffic captured</h4>
-      <p>Your app generates packets. The kernel routes them into the <code>tun0</code> virtual interface.</p>
+      <p>Your app generates packets. The kernel routes them into the <code style="font-family:var(--mono);font-size:11px;background:var(--n2);padding:1px 4px;border-radius:3px;color:var(--amber)">tun0</code> virtual interface.</p>
     </div>
-    <div class="step active">
-      <div class="step-num">02</div>
-      <div class="step-icon-wrap"><i class="ti ti-lock" aria-hidden="true"></i></div>
+    <div class="step">
+      <div class="step-num" style="color:var(--red)">02</div>
+      <div class="step-icon-wrap si-teal" style="background:rgba(191,97,106,0.1);color:var(--red)"><i class="ti ti-lock" aria-hidden="true"></i></div>
       <h4>Encrypted</h4>
-      <p>xnvpn wraps each packet in AES-256-GCM with a unique IV. Nobody can read it in transit.</p>
+      <p>xnvpn wraps each packet in AES-256-GCM with a unique IV. Nobody reads it in transit.</p>
     </div>
-    <div class="step active">
-      <div class="step-num">03</div>
-      <div class="step-icon-wrap"><i class="ti ti-radio" aria-hidden="true"></i></div>
+    <div class="step">
+      <div class="step-num" style="color:var(--blue)">03</div>
+      <div class="step-icon-wrap si-blue"><i class="ti ti-radio" aria-hidden="true"></i></div>
       <h4>Tunneled via UDP</h4>
-      <p>The ciphertext travels over a raw UDP socket to your home server. Fast, no overhead.</p>
+      <p>Ciphertext travels over a raw UDP socket to your home server. Fast, no overhead.</p>
     </div>
-    <div class="step active">
-      <div class="step-num">04</div>
-      <div class="step-icon-wrap"><i class="ti ti-world" aria-hidden="true"></i></div>
+    <div class="step">
+      <div class="step-num" style="color:var(--green)">04</div>
+      <div class="step-icon-wrap si-green"><i class="ti ti-world" aria-hidden="true"></i></div>
       <h4>Exits clean</h4>
-      <p>Your server decrypts, verifies the tag, and forwards to the internet from a trusted IP.</p>
+      <p>Your server decrypts, verifies the tag, forwards to the internet from a trusted IP.</p>
     </div>
   </div>
 </div>
 
+<section class="packet-section">
+  <div class="section-eyebrow">
+    <div class="eyebrow-dot" style="background:var(--amber)"></div>
+    <span class="eyebrow-text" style="color:var(--amber)">Wire format</span>
+  </div>
+  <div class="section-h">Packet structure</div>
+  <p class="section-sub">Every UDP payload follows the same authenticated envelope — IV first, ciphertext, tag last.</p>
+  <div class="packet-viz">
+    <div class="pkt-header">
+      <i class="ti ti-file-code" aria-hidden="true"></i>
+      <span>encrypted udp payload</span> — AES-256-GCM
+    </div>
+    <div class="pkt-body">
+      <div class="pkt-row">
+        <span class="pkt-lbl">plaintext</span>
+        <div class="blk blk-plain">raw IP packet (variable length)</div>
+      </div>
+      <div class="pkt-arrow">↓ AES-256-GCM encrypt</div>
+      <div class="pkt-row">
+        <span class="pkt-lbl">on wire</span>
+        <div class="blk blk-iv">IV · 12 B</div>
+        <div class="blk blk-ct">ciphertext</div>
+        <div class="blk blk-tag">tag · 16 B</div>
+      </div>
+      <div class="pkt-legend">
+        <div class="leg"><div class="leg-dot" style="background:rgba(235,203,139,0.6)"></div><span style="color:var(--amber)">IV</span> — unique per packet</div>
+        <div class="leg"><div class="leg-dot" style="background:rgba(191,97,106,0.6)"></div><span style="color:var(--red)">Ciphertext</span> — encrypted payload</div>
+        <div class="leg"><div class="leg-dot" style="background:rgba(143,188,187,0.6)"></div><span style="color:var(--teal)">GCM tag</span> — tamper detection</div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <div class="cta-section">
-  <div class="cta-box">
+  <div class="cta-inner">
     <h2>Ready to own your connection?</h2>
-    <p>Join the waitlist for the managed cloud tier, or clone the repo and ship today.</p>
-    <div class="cta-input-row">
+    <p>Join the waitlist for the managed cloud tier, or clone the repo and ship today. Open source forever.</p>
+    <div class="cta-row">
       <input type="email" placeholder="you@example.com">
       <button>Join waitlist</button>
     </div>
-    <div class="cta-note">No spam. Unsubscribe anytime. Open source forever.</div>
+    <div class="cta-note">No spam. Unsubscribe anytime.</div>
+    <div class="cta-tags">
+      <span class="cta-tag c-teal"><i class="ti ti-lock" aria-hidden="true"></i> Encrypted</span>
+      <span class="cta-tag c-green"><i class="ti ti-code" aria-hidden="true"></i> Open source</span>
+      <span class="cta-tag c-blue"><i class="ti ti-server" aria-hidden="true"></i> Self-hosted</span>
+      <span class="cta-tag c-purple"><i class="ti ti-eye-off" aria-hidden="true"></i> Zero logs</span>
+    </div>
   </div>
 </div>
 
@@ -307,8 +428,10 @@ footer{
     <span class="footer-name"><span>xn</span>vpn</span>
   </div>
   <div class="footer-links">
-    <a href="http://github.com/nerdemma/xnvpn">GitHub</a>
-    <a href="mailto:hello@emmanuelbreyaue.com">Contact</a>
+    <a href="#">GitHub</a>
+    <a href="#">Docs</a>
+    <a href="#">Privacy</a>
+    <a href="#">Contact</a>
   </div>
-  <div class="footer-right">© 2025 xnvpn · built in C/C++</div>
+  <div class="footer-right">© 2025 xnvpn · C/C++ · Linux</div>
 </footer>
