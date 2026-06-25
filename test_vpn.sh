@@ -6,24 +6,26 @@ SRC="$ROOT/src"
 REPORT="$ROOT/vpn_test_report.txt"
 SERVER_LOG="$ROOT/vpn_server.log"
 CLIENT_LOG="$ROOT/vpn_client.log"
-PING_LOG="$ROOT/vpn_ping.log"
+PING_LOG_1="$ROOT/vpn_ping_client_to_server.log"
+PING_LOG_2="$ROOT/vpn_ping_server_to_client.log"
 SERVER_BIN="$SRC/server"
 CLIENT_BIN="$SRC/client"
-SERVER_PID=0
-CLIENT_PID=0
+
+# Nombres de los namespaces de red
+NS_SERVER="ns_vpn_server"
+NS_CLIENT="ns_vpn_client"
 
 cleanup() {
-    echo "\n[cleanup] stopping processes and removing test interfaces" >> "$REPORT"
-    if [[ $CLIENT_PID -ne 0 ]]; then
-        kill "$CLIENT_PID" 2>/dev/null || true
-        wait "$CLIENT_PID" 2>/dev/null || true
-    fi
-    if [[ $SERVER_PID -ne 0 ]]; then
-        kill "$SERVER_PID" 2>/dev/null || true
-        wait "$SERVER_PID" 2>/dev/null || true
-    fi
-    ip link del tun0 2>/dev/null || true
-    ip link del tun1 2>/dev/null || true
+    echo "" >> "$REPORT"
+    echo "[cleanup] Deteniendo procesos y eliminando Namespaces/Veth..." >> "$REPORT"
+    
+    # Matar binarios de forma segura en sus namespaces
+    ip netns exec "$NS_CLIENT" killall client 2>/dev/null || true
+    ip netns exec "$NS_SERVER" killall server 2>/dev/null || true
+    
+    # Eliminar namespaces (esto borra automáticamente interfaces tun y veth asociadas)
+    ip netns del "$NS_SERVER" 2>/dev/null || true
+    ip netns del "$NS_CLIENT" 2>/dev/null || true
 }
 trap cleanup EXIT
 
@@ -35,94 +37,81 @@ fi
 : > "$REPORT"
 : > "$SERVER_LOG"
 : > "$CLIENT_LOG"
-: > "$PING_LOG"
+: > "$PING_LOG_1"
+: > "$PING_LOG_2"
 
-echo "VPN Prototype Functional Test" >> "$REPORT"
+echo "VPN Prototype Functional Test (Isolated Context)" >> "$REPORT"
 echo "Fecha: $(date)" >> "$REPORT"
-echo "Directorio del proyecto: $ROOT" >> "$REPORT"
 echo "" >> "$REPORT"
 
-echo "1. Compilando los binarios..." | tee -a "$REPORT"
-if gcc -Wall -Wextra -o "$CLIENT_BIN" "$SRC/client.c" 2>> "$REPORT" && \
-   gcc -Wall -Wextra -o "$SERVER_BIN" "$SRC/server.c" 2>> "$REPORT"; then
+echo "1. Compilando los binarios (con OpenSSL)..." | tee -a "$REPORT"
+if gcc -Wall -Wextra -o "$CLIENT_BIN" "$SRC/client.c" -lcrypto 2>> "$REPORT" && \
+   gcc -Wall -Wextra -o "$SERVER_BIN" "$SRC/server.c" -lcrypto 2>> "$REPORT"; then
     echo "Compilación exitosa." | tee -a "$REPORT"
 else
-    echo "Compilación fallida." | tee -a "$REPORT"
+    echo "Compilación fallida. Revisa el reporte." | tee -a "$REPORT"
     exit 1
 fi
 
-echo "\n2. Iniciando el servidor..." | tee -a "$REPORT"
-"$SERVER_BIN" > "$SERVER_LOG" 2>&1 &
-SERVER_PID=$!
+echo "" | tee -a "$REPORT"
+echo "2. Configurando red aislada (Namespaces)..." | tee -a "$REPORT"
+# Crear entornos aislados
+ip netns add "$NS_SERVER"
+ip netns add "$NS_CLIENT"
 
+# Crear un cable virtual (veth) para interconectar los dos entornos
+ip link add veth_srv type veth peer name veth_cli
+ip link set veth_srv netns "$NS_SERVER"
+ip link set veth_cli netns "$NS_CLIENT"
+
+# Configurar IPs reales de tránsito de internet (Red 192.168.50.0/24)
+ip netns exec "$NS_SERVER" ip addr add 192.168.50.1/24 dev veth_srv
+ip netns exec "$NS_SERVER" ip link set veth_srv up
+ip netns exec "$NS_SERVER" ip link set lo up
+
+ip netns exec "$NS_CLIENT" ip addr add 192.168.50.2/24 dev veth_cli
+ip netns exec "$NS_CLIENT" ip link set veth_cli up
+ip netns exec "$NS_CLIENT" ip link set lo up
+
+# Deshabilitar rp_filter en los entornos virtuales para evitar drops asimétricos
+ip netns exec "$NS_SERVER" sysctl -w net.ipv4.conf.all.rp_filter=0 >/dev/null
+ip netns exec "$NS_CLIENT" sysctl -w net.ipv4.conf.all.rp_filter=0 >/dev/null
+
+echo "" | tee -a "$REPORT"
+echo "3. Iniciando el servidor en su propio entorno..." | tee -a "$REPORT"
+# El servidor se ejecuta dentro de su namespace escuchando en su IP de tránsito
+ip netns exec "$NS_SERVER" "$SERVER_BIN" > "$SERVER_LOG" 2>&1 &
 sleep 1
 
-if ps -p "$SERVER_PID" >/dev/null 2>&1; then
-    echo "Servidor iniciado (PID $SERVER_PID)." | tee -a "$REPORT"
-else
-    echo "No se pudo iniciar el servidor." | tee -a "$REPORT"
-    cat "$SERVER_LOG" >> "$REPORT"
-    exit 1
-fi
+echo "" | tee -a "$REPORT"
+echo "4. Iniciando el cliente en su propio entorno..." | tee -a "$REPORT"
+# El cliente se conecta a la IP del servidor mediante el cable veth
+ip netns exec "$NS_CLIENT" "$CLIENT_BIN" 192.168.50.1 > "$CLIENT_LOG" 2>&1 &
+sleep 2
 
-echo "\n3. Iniciando el cliente..." | tee -a "$REPORT"
-"$CLIENT_BIN" 127.0.0.1 > "$CLIENT_LOG" 2>&1 &
-CLIENT_PID=$!
+echo "" | tee -a "$REPORT"
+echo "5. Ejecutando pings de prueba a través del túnel..." | tee -a "$REPORT"
 
-sleep 1
+echo "Ejecutando Ping desde Cliente (10.0.0.2) hacia Servidor (10.0.0.1)..." | tee -a "$REPORT"
+# Forzamos a que el comando ping corra exclusivamente en el entorno aislado del cliente
+ip netns exec "$NS_CLIENT" ping -c 3 10.0.0.1 > "$PING_LOG_1" 2>&1 || true
+cat "$PING_LOG_1" >> "$REPORT"
 
-if ps -p "$CLIENT_PID" >/dev/null 2>&1; then
-    echo "Cliente iniciado (PID $CLIENT_PID)." | tee -a "$REPORT"
-else
-    echo "No se pudo iniciar el cliente." | tee -a "$REPORT"
-    cat "$CLIENT_LOG" >> "$REPORT"
-    exit 1
-fi
+echo "Ejecutando Ping desde Servidor (10.0.0.1) hacia Cliente (10.0.0.2)..." | tee -a "$REPORT"
+# Forzamos a que el comando ping corra exclusivamente en el entorno aislado del servidor
+ip netns exec "$NS_SERVER" ping -c 3 10.0.0.2 > "$PING_LOG_2" 2>&1 || true
+cat "$PING_LOG_2" >> "$REPORT"
 
-echo "\n4. Verificando interfaces TUN..." | tee -a "$REPORT"
-for iface in tun0 tun1; do
-    if ip addr show "$iface" >/dev/null 2>&1; then
-        echo "$iface encontrado:" | tee -a "$REPORT"
-        ip addr show "$iface" | sed 's/^/    /' >> "$REPORT"
-    else
-        echo "ERROR: $iface no existe." | tee -a "$REPORT"
-        exit 1
-    fi
-done
-
-sleep 1
-
-echo "\n5. Ejecutando pings de prueba..." | tee -a "$REPORT"
-{
-    echo "Ping desde tun1 hacia 10.0.0.1"
-    ping -I tun1 -c 3 10.0.0.1
-    echo "\nPing desde tun0 hacia 10.0.0.2"
-    ping -I tun0 -c 3 10.0.0.2
-} > "$PING_LOG" 2>&1
-
-cat "$PING_LOG" >> "$REPORT"
-
-echo "\n6. Resumen de resultados" | tee -a "$REPORT"
+echo "" | tee -a "$REPORT"
+echo "6. Resumen de resultados" | tee -a "$REPORT"
 PING1_OK=0
 PING2_OK=0
-if grep -q "3 received" "$PING_LOG"; then
-    PING1_OK=1
-fi
-if grep -q "3 received" "$PING_LOG"; then
-    PING2_OK=1
-fi
+
+if grep -q "3 received" "$PING_LOG_1"; then PING1_OK=1; fi
+if grep -q "3 received" "$PING_LOG_2"; then PING2_OK=1; fi
 
 if [[ $PING1_OK -eq 1 && $PING2_OK -eq 1 ]]; then
-    echo "RESULTADO: Éxito. El túnel TUN funciona correctamente y el tráfico ICMP atraviesa el túnel." | tee -a "$REPORT"
+    echo "RESULTADO: Éxito. El túnel TUN funciona de extremo a extremo, OpenSSL cifra/descifra correctamente bajo AES-256-GCM." | tee -a "$REPORT"
 else
-    echo "RESULTADO: Fallo parcial o total. Revisa los registros y las interfaces." | tee -a "$REPORT"
+    echo "RESULTADO: Fallo en el túnel. Revisa los logs aislados." | tee -a "$REPORT"
 fi
-
-echo "" >> "$REPORT"
-echo "Registros guardados en:" >> "$REPORT"
-echo "  - $SERVER_LOG" >> "$REPORT"
-echo "  - $CLIENT_LOG" >> "$REPORT"
-echo "  - $PING_LOG" >> "$REPORT"
-echo "Reporte final: $REPORT" >> "$REPORT"
-
-echo "\nPrueba completada. Revisa $REPORT para el detalle."

@@ -1,0 +1,36 @@
+VPN Prototype Functional Test (Isolated Context)
+Fecha: jue 25 jun 2026 17:01:51 -03
+
+1. Compilando los binarios (con OpenSSL)...
+Compilación exitosa.
+
+2. Configurando red aislada (Namespaces)...
+
+3. Iniciando el servidor en su propio entorno...
+
+4. Iniciando el cliente en su propio entorno...
+
+5. Ejecutando pings de prueba a través del túnel...
+Ejecutando Ping desde Cliente (10.0.0.2) hacia Servidor (10.0.0.1)...
+PING 10.0.0.1 (10.0.0.1) 56(84) bytes of data.
+64 bytes from 10.0.0.1: icmp_seq=1 ttl=64 time=2.77 ms
+64 bytes from 10.0.0.1: icmp_seq=2 ttl=64 time=2.17 ms
+64 bytes from 10.0.0.1: icmp_seq=3 ttl=64 time=3.02 ms
+
+--- 10.0.0.1 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2003ms
+rtt min/avg/max/mdev = 2.169/2.652/3.015/0.355 ms
+Ejecutando Ping desde Servidor (10.0.0.1) hacia Cliente (10.0.0.2)...
+PING 10.0.0.2 (10.0.0.2) 56(84) bytes of data.
+64 bytes from 10.0.0.2: icmp_seq=1 ttl=64 time=2.25 ms
+64 bytes from 10.0.0.2: icmp_seq=2 ttl=64 time=0.662 ms
+64 bytes from 10.0.0.2: icmp_seq=3 ttl=64 time=0.775 ms
+
+--- 10.0.0.2 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2003ms
+rtt min/avg/max/mdev = 0.662/1.228/2.247/0.722 ms
+
+6. Resumen de resultados
+RESULTADO: Éxito. El túnel TUN funciona de extremo a extremo, OpenSSL cifra/descifra correctamente bajo AES-256-GCM.
+
+[cleanup] Deteniendo procesos y eliminando Namespaces/Veth...
